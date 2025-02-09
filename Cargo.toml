@@ -1,0 +1,25 @@
+[package]
+name = "editorjs2html"
+version = "0.1.1"
+edition = "2024"
+authors = ["JS <mkjsm57@gmail.com>"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+description = "editorjs2html converts Editor.js output into clean HTML, supporting multiple block types efficiently."
+keywords = ["editorjs", "html", "parser", "editorjs-to-html", "editor-js"]
+categories = ["parser-implementations", "parsing"]
+repository = "https://github.com/MKJS57/editorjs2html"
+documentation = "https://docs.rs/editorjs2html"
+
+[dependencies]
+anyhow = "1.0.95"
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = { version = "1.0.138" }
+tracing = { version = "0.1.41" }
+
+[[example]]
+name = "simple"
+path = "./examples/simple.rs"
+
+[badges]
+maintenance = { status = "actively-developed" }
