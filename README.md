@@ -26,8 +26,19 @@ This library supports conversion for the following Editor.js block types with co
 | Image / Simple Image| `js-image`       |
 | Embed               | `js-embed`       |
 | Raw Input           | `js-raw`         |
+| Alert               | `js-alert`       |
 
-**Note**: Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class.
+**Note**:
+- Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class.
+- Alert blocks (`js-alert`) have subclasses for different alert types:
+  - `js-primary`
+  - `js-secondary`
+  - `js-info`
+  - `js-success`
+  - `js-warning`
+  - `js-danger`
+  - `js-light`
+  - `js-dark`
 
 ## Installation
 ```sh

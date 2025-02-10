@@ -117,7 +117,15 @@ fn main() {
                 "caption": "Author",
                 "alignment": "left"
             }
+        },
+        {
+            "type": "alert",
+            "data": {
+                "type": "danger",
+                "align" : "center",
+                "text": "<strong>Holy smokes!</strong><br>Something seriously <em>bad</em> happened."
             }
+        }
         ],
         "version" : "2.24.3"
     });

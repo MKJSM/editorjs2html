@@ -1,7 +1,7 @@
 [package]
 name = "editorjs2html"
-version = "0.1.1"
-edition = "2024"
+version = "0.1.2"
+edition = "2021"
 authors = ["JS <mkjsm57@gmail.com>"]
 license = "MIT OR Apache-2.0"
 readme = "README.md"
@@ -15,7 +15,7 @@ documentation = "https://docs.rs/editorjs2html"
 anyhow = "1.0.95"
 serde = { version = "1.0.217", features = ["derive"] }
 serde_json = { version = "1.0.138" }
-tracing = { version = "0.1.41" }
+log = { version = "0.4.25" }
 
 [[example]]
 name = "simple"
@@ -23,3 +23,11 @@ path = "./examples/simple.rs"
 
 [badges]
 maintenance = { status = "actively-developed" }
+
+[profile.release]
+opt-level = 3     # Maximum optimizations
+debug = false     # No debug symbols (reduces size)
+lto = "fat"       # Link Time Optimization (LTO) for better performance
+codegen-units = 1 # Improve optimization at the cost of compile time
+panic = "abort"   # Smaller binary size by removing unwind handling
+strip = "symbols" # Reduce binary size while keeping backtrace support

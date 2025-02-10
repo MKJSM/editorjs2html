@@ -1,6 +1,6 @@
 // Editorjs2Html
 
-use anyhow::{Result, anyhow};
+use anyhow::{anyhow, Result};
 
 mod models;
 
@@ -99,7 +99,7 @@ pub fn to_html(str: &str) -> Result<String> {
                                     ));
                                 }
                                 Err(e) => {
-                                    tracing::error!("Parse list error: {}", e);
+                                    log::error!("Parse list error: {}", e);
                                 }
                             }
                         }
@@ -139,7 +139,7 @@ pub fn to_html(str: &str) -> Result<String> {
                     let mut checklist = String::new();
                     for item in items {
                         checklist.push_str(&format!(
-                            "<div class=\"js-checkbox\"><input type='checkbox' {} disabled> {}</div>",
+                            "<div class=\"js-checkbox\"><input type=\"checkbox\" {} disabled> {}</div>",
                             if item.checked { "checked" } else { "" },
                             item.text
                         ));
@@ -156,7 +156,7 @@ pub fn to_html(str: &str) -> Result<String> {
             }
             "link" => {
                 html_string.push_str(&format!(
-                    "<div class=\"js-link\"><a href='{}' target='_blank'>{}</a></div>",
+                    "<div class=\"js-link\"><a href=\"{}\" target=\"_blank\">{}</a></div>",
                     data.url.unwrap_or_default(),
                     data.text.unwrap_or_default()
                 ));
@@ -182,7 +182,7 @@ pub fn to_html(str: &str) -> Result<String> {
             }
             "warning" => {
                 html_string.push_str(&format!(
-                    "<div class='warning'><strong>{}</strong><p>{}</p></div>",
+                    "<div class=\"warning\"><strong>{}</strong><p>{}</p></div>",
                     data.title.unwrap_or_default(),
                     data.message.unwrap_or_default()
                 ));
@@ -190,7 +190,7 @@ pub fn to_html(str: &str) -> Result<String> {
             "image" => {
                 if let Some(file) = data.file {
                     html_string.push_str(&format!(
-                        "<div class='js-image'><img src='{}' alt='Image'>{}</div>",
+                        "<div class=\"js-image\"><img src=\"{}\" alt=\"Image\">{}</div>",
                         file,
                         if let Some(caption) = data.caption {
                             format!("<p>{}</p>", caption)
@@ -201,7 +201,7 @@ pub fn to_html(str: &str) -> Result<String> {
                 }
                 if let Some(url) = data.url {
                     html_string.push_str(&format!(
-                        "<div class='js-image'><img src='{}' alt='Image'></div>",
+                        "<div class=\"js-image\"><img src=\"{}\" alt=\"Image\"></div>",
                         url
                     ));
                 }
@@ -209,7 +209,7 @@ pub fn to_html(str: &str) -> Result<String> {
             "embed" => {
                 if let Some(url) = data.url {
                     html_string.push_str(&format!(
-                        "<div class='js-embed'><iframe src='{}' title='Embedded content'></iframe>{}</div>",
+                        "<div class=\"js-embed\"><iframe src=\"{}\" title=\"Embedded content\"></iframe>{}</div>",
                         url,
                         if let Some(caption) = data.caption {
                             format!("<p>{}</p>", caption)
@@ -220,10 +220,16 @@ pub fn to_html(str: &str) -> Result<String> {
                 }
             }
             "raw" => html_string.push_str(&format!(
-                "<div class='js-raw'>{}</div>",
+                "<div class=\"js-raw\">{}</div>",
                 data.html.unwrap_or_default()
             )),
-            _ => tracing::error!(
+            "alert" => html_string.push_str(&format!(
+                "<div class=\"js-alert alert-{} style=\"text-align: {};\">{}</div>",
+                data.r#type.unwrap_or_default(),
+                data.align.unwrap_or_default(),
+                data.text.unwrap_or_default()
+            )),
+            _ => log::error!(
                 "editor2html library doesn't support for the {}",
                 block.r#type
             ),

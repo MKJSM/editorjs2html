@@ -36,6 +36,8 @@ pub struct Data {
     pub underline: Option<bool>,
     pub url: Option<String>,
     pub with_headings: Option<bool>,
+    pub align: Option<String>,
+    pub r#type: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
