@@ -58,9 +58,14 @@ pub fn to_html(str: &str) -> Result<String> {
         match block.r#type.to_lowercase().as_str() {
             "header" | "heading" => {
                 html_string.push_str(&format!(
-                    "<div class=\"js-head\"><h{l}>{t}</h{l}>",
+                    "<div class=\"js-head\"{s}><h{l}>{t}</h{l}>",
                     l = data.level.unwrap_or(4),
                     t = data.text.unwrap_or_default(),
+                    s = if let Some(align) = data.align.clone() {
+                        format!(" style=\"text-align: {};\"", align)
+                    } else {
+                        String::new()
+                    }
                 ));
             }
             "paragraph" => {
@@ -224,7 +229,7 @@ pub fn to_html(str: &str) -> Result<String> {
                 data.html.unwrap_or_default()
             )),
             "alert" => html_string.push_str(&format!(
-                "<div class=\"js-alert alert-{} style=\"text-align: {};\">{}</div>",
+                "<div class=\"js-alert js-alert-{} style=\"text-align: {};\">{}</div>",
                 data.r#type.unwrap_or_default(),
                 data.align.unwrap_or_default(),
                 data.text.unwrap_or_default()

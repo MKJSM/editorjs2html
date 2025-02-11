@@ -11,34 +11,34 @@
 ## Supported Block Types
 This library supports conversion for the following Editor.js block types with corresponding CSS classes:
 
-| Block Type          | Class Name       |
-|---------------------|------------------|
-| Header              | `js-head`        |
-| Paragraph           | `js-para`        |
-| List / Nested List  | `js-list`        |
-| Table               | `js-table`       |
-| Quote               | `js-quote`       |
-| Checklist           | `js-checklist`   |
-| Code                | `js-code`        |
-| Link                | `js-link`        |
-| Inline Text         | `js-inline`      |
-| Warning             | `js-warning`     |
-| Image / Simple Image| `js-image`       |
-| Embed               | `js-embed`       |
-| Raw Input           | `js-raw`         |
-| Alert               | `js-alert`       |
+| Block Type                     | Class Name       |
+|--------------------------------|------------------|
+| Header / Header with alignment | `js-head`        |
+| Paragraph                      | `js-para`        |
+| List / Nested List             | `js-list`        |
+| Table                          | `js-table`       |
+| Quote                          | `js-quote`       |
+| Checklist                      | `js-checklist`   |
+| Code                           | `js-code`        |
+| Link                           | `js-link`        |
+| Inline Text                    | `js-inline`      |
+| Warning                        | `js-warning`     |
+| Image / Simple Image           | `js-image`       |
+| Embed                          | `js-embed`       |
+| Raw Input                      | `js-raw`         |
+| Alert                          | `js-alert`       |
 
 **Note**:
 - Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class.
 - Alert blocks (`js-alert`) have subclasses for different alert types:
-  - `js-primary`
-  - `js-secondary`
-  - `js-info`
-  - `js-success`
-  - `js-warning`
-  - `js-danger`
-  - `js-light`
-  - `js-dark`
+  - `js-alert-primary`
+  - `js-alert-secondary`
+  - `js-alert-info`
+  - `js-alert-success`
+  - `js-alert-warning`
+  - `js-alert-danger`
+  - `js-alert-light`
+  - `js-alert-dark`
 
 ## Installation
 ```sh
