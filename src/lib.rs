@@ -58,7 +58,7 @@ pub fn to_html(str: &str) -> Result<String> {
         match block.r#type.to_lowercase().as_str() {
             "header" | "heading" => {
                 html_string.push_str(&format!(
-                    "<div class=\"js-head\"{s}><h{l}>{t}</h{l}>",
+                    "<div class=\"js-head\"{s}><h{l}>{t}</h{l}></div>",
                     l = data.level.unwrap_or(4),
                     t = data.text.unwrap_or_default(),
                     s = if let Some(align) = data.align.clone() {
@@ -70,7 +70,12 @@ pub fn to_html(str: &str) -> Result<String> {
             }
             "paragraph" => {
                 html_string.push_str(&format!(
-                    "<div class=\"js-para\"><p>{}</p></div>",
+                    "<div class=\"js-para\"{}><p>{}</p></div>",
+                    if let Some(align) = data.align.clone() {
+                        format!(" style=\"text-align: {};\"", align)
+                    } else {
+                        String::new()
+                    },
                     data.text.unwrap_or_default(),
                 ));
             }
@@ -125,7 +130,7 @@ pub fn to_html(str: &str) -> Result<String> {
                     table_data.push_str(&form_table(ele, tag));
                 }
                 html_string.push_str(&format!(
-                    "<div class=\"js-table\"><table>{}</table><div>",
+                    "<div class=\"js-table\"><table>{}</table></div>",
                     table_data.as_str()
                 ));
             }
@@ -229,11 +234,43 @@ pub fn to_html(str: &str) -> Result<String> {
                 data.html.unwrap_or_default()
             )),
             "alert" => html_string.push_str(&format!(
-                "<div class=\"js-alert js-alert-{} style=\"text-align: {};\">{}</div>",
+                "<div class=\"js-alert js-alert-{}\" style=\"text-align: {};\">{}</div>",
                 data.r#type.unwrap_or_default(),
                 data.align.unwrap_or_default(),
                 data.text.unwrap_or_default()
             )),
+            "title" => {
+                let mut style = String::new();
+                let align = match data.align_text.unwrap_or_default().as_str() {
+                    "Text-Align-Center" => "center",
+                    "Text-Align-Right" => "right",
+                    "Text-Align-Left" => "left",
+                    _ => "",
+                };
+
+                if let Some(color) = data.color {
+                    style.push_str(&format!("color: {};", color.to_lowercase()));
+                }
+                if !align.is_empty() {
+                    style.push_str(&format!(" text-align: {align};"));
+                }
+
+                let tag = data
+                    .title_type
+                    .unwrap_or("h4".to_string())
+                    .to_ascii_lowercase();
+                let style = if !style.is_empty() {
+                    &format!(" style=\"{}\"", style)
+                } else {
+                    ""
+                };
+                html_string.push_str(&format!(
+                    "<div class=\"js-title\"><{t}{s}>{v}</{t}></div>",
+                    s = style,
+                    t = tag,
+                    v = data.text.unwrap_or_default()
+                ))
+            }
             _ => log::error!(
                 "editor2html library doesn't support for the {}",
                 block.r#type

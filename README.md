@@ -27,6 +27,7 @@ This library supports conversion for the following Editor.js block types with co
 | Embed                          | `js-embed`       |
 | Raw Input                      | `js-raw`         |
 | Alert                          | `js-alert`       |
+| Title                          | `js-title`       |
 
 **Note**:
 - Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class.

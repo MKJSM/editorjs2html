@@ -122,8 +122,33 @@ fn main() {
             "type": "alert",
             "data": {
                 "type": "danger",
-                "align" : "center",
+                "align" : "right",
                 "text": "<strong>Holy smokes!</strong><br>Something seriously <em>bad</em> happened."
+            }
+        },
+        {
+            "id": "9V7e_m3ao4",
+            "type": "title",
+            "data": {
+                "text": "Heading1",
+                "color": "Red",
+                "alignText": "Text-Align-Center",
+                "titleType": "H1"
+            }
+        },
+        {
+            "type" : "paragraph",
+            "data" : {
+                "text" : "Check out our projects on a <a href=\"https://github.com/codex-team\">GitHub page</a>.",
+                "alignment": "right"
+            }
+        },
+        {
+            "type": "header",
+            "data": {
+              "text": "Why Telegram is the best messenger",
+              "level": 2,
+              "align": "right"
             }
         }
         ],

@@ -17,10 +17,13 @@ pub struct Document {
 #[derive(Debug, Clone, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Data {
+    pub align_text: Option<String>,
+    pub align: Option<String>,
     pub alignment: Option<String>,
     pub bold: Option<bool>,
     pub caption: Option<String>,
     pub code: Option<String>,
+    pub color: Option<String>,
     pub content: Option<Value>,
     pub file: Option<String>,
     pub html: Option<String>,
@@ -30,14 +33,14 @@ pub struct Data {
     pub level: Option<u8>,
     pub marker: Option<bool>,
     pub message: Option<String>,
+    pub r#type: Option<String>,
     pub style: Option<String>,
     pub text: Option<String>,
+    pub title_type: Option<String>,
     pub title: Option<String>,
     pub underline: Option<bool>,
     pub url: Option<String>,
     pub with_headings: Option<bool>,
-    pub align: Option<String>,
-    pub r#type: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
