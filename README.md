@@ -31,14 +31,14 @@ This library supports conversion for the following Editor.js block types with co
 **Note**:
 - Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class.
 - Alert blocks (`js-alert`) have subclasses for different alert types:
-  - `js-primary`
-  - `js-secondary`
-  - `js-info`
-  - `js-success`
-  - `js-warning`
-  - `js-danger`
-  - `js-light`
-  - `js-dark`
+  - `alert-primary`
+  - `alert-secondary`
+  - `alert-info`
+  - `alert-success`
+  - `alert-warning`
+  - `alert-danger`
+  - `alert-light`
+  - `alert-dark`
 
 ## Installation
 ```sh
