@@ -25,7 +25,7 @@ pub struct Data {
     pub code: Option<String>,
     pub color: Option<String>,
     pub content: Option<Value>,
-    pub file: Option<String>,
+    pub file: Option<File>,
     pub html: Option<String>,
     pub inline_code: Option<bool>,
     pub italic: Option<bool>,
@@ -39,6 +39,9 @@ pub struct Data {
     pub title_type: Option<String>,
     pub title: Option<String>,
     pub underline: Option<bool>,
+    pub with_border: Option<bool>,
+    pub with_background: Option<bool>,
+    pub stretched: Option<bool>,
     pub url: Option<String>,
     pub with_headings: Option<bool>,
 }
@@ -53,4 +56,9 @@ pub struct ListItem {
 pub struct ChecklistItem {
     pub text: String,
     pub checked: bool,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct File {
+    pub url: String,
 }

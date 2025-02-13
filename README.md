@@ -1,4 +1,4 @@
-# editorjs2html
+# Editorjs2html
 
 `editorjs2html` is a utility that converts [Editor.js](https://editorjs.io/) output into HTML.
 
@@ -40,6 +40,10 @@ This library supports conversion for the following Editor.js block types with co
   - `js-alert-danger`
   - `js-alert-light`
   - `js-alert-dark`
+- Image blocks (`js-image`) support the following modifier classes:
+  - `js-image--stretched` (if `stretched` is `true`)
+  - `js-image--bordered` (if `withBorder` is `true`)
+  - `js-image--background` (if `withBackground` is `true`)
 
 ## Installation
 ```sh
@@ -75,12 +79,35 @@ fn main() {
                 "data" : {
                     "text" : "Hey. Meet the new Editor. On this page you can see it in action — try to edit this text."
                 }
+            },
+            {
+                "id" : "image1",
+                "type" : "image",
+                "data" : {
+                    "file" : {
+                        "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg"
+                    },
+                    "caption" : "Roadster // tesla.com",
+                    "withBorder" : false,
+                    "withBackground" : true,
+                    "stretched" : true
+                }
             }
         ]
     });
     let html_content = editorjs2html::to_html(&content.to_string()).unwrap();
     println!("converted to html: {}", html_content)
 }
+```
+
+### Example Output for Image Block
+For the above JSON input, the generated HTML for the `Image` block will look like this:
+
+```html
+<div class="js-image js-image--stretched js-image--background">
+    <img src="https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg" alt="Roadster // tesla.com">
+    <p>Roadster // tesla.com</p>
+</div>
 ```
 
 ## Styling
@@ -100,6 +127,26 @@ Styling checklist items:
   display: flex;
   gap: 8px;
   align-items: center;
+}
+```
+
+Styling image blocks:
+```css
+.js-image {
+  margin: 1rem 0;
+}
+
+.js-image--stretched {
+  width: 100%;
+}
+
+.js-image--bordered {
+  border: 2px solid #ccc;
+}
+
+.js-image--background {
+  background-color: #f5f5f5;
+  padding: 1rem;
 }
 ```
 

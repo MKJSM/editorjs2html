@@ -198,21 +198,42 @@ pub fn to_html(str: &str) -> Result<String> {
                 ));
             }
             "image" => {
-                if let Some(file) = data.file {
+                let url = if let Some(file) = data.file {
+                    file.url
+                } else {
+                    data.url.unwrap_or_default()
+                };
+                if !url.is_empty() {
                     html_string.push_str(&format!(
-                        "<div class=\"js-image\"><img src=\"{}\" alt=\"Image\">{}</div>",
-                        file,
-                        if let Some(caption) = data.caption {
-                            format!("<p>{}</p>", caption)
+                        r#"<div class="js-image{}{}{}">
+                            <img src="{}"{}>{}
+                        </div>"#,
+                        if data.stretched.unwrap_or_default() {
+                            " js-image--stretched"
+                        } else {
+                            ""
+                        },
+                        if data.with_border.unwrap_or_default() {
+                            " js-image--bordered"
+                        } else {
+                            ""
+                        },
+                        if data.with_background.unwrap_or_default() {
+                            " js-image--background"
+                        } else {
+                            ""
+                        },
+                        url,
+                        if let Some(caption) = data.caption.clone() {
+                            format!(" alt=\"{}\"", caption)
+                        } else {
+                            String::new()
+                        },
+                        if let Some(caption) = data.caption.clone() {
+                            format!(" <p>{}</p>", caption)
                         } else {
                             String::new()
                         }
-                    ));
-                }
-                if let Some(url) = data.url {
-                    html_string.push_str(&format!(
-                        "<div class=\"js-image\"><img src=\"{}\" alt=\"Image\"></div>",
-                        url
                     ));
                 }
             }

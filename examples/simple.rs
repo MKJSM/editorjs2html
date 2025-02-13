@@ -150,6 +150,28 @@ fn main() {
               "level": 2,
               "align": "right"
             }
+        },
+        {
+            "type": "image",
+            "data": {
+                "url": "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg",
+                "caption": "Roadster // tesla.com",
+                "withBorder": false,
+                "withBackground": false,
+                "stretched": true
+            }
+        },
+        {
+            "type": "image",
+            "data": {
+                "file": {
+                    "url": "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg"
+                },
+                "caption": "Roadster // tesla.com",
+                "withBorder": false,
+                "withBackground": true,
+                "stretched": true
+            }
         }
         ],
         "version" : "2.24.3"
