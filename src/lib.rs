@@ -238,10 +238,28 @@ pub fn to_html(str: &str) -> Result<String> {
                 }
             }
             "embed" => {
-                if let Some(url) = data.url {
+                if let Some(url) = data.embed {
                     html_string.push_str(&format!(
-                        "<div class=\"js-embed\"><iframe src=\"{}\" title=\"Embedded content\"></iframe>{}</div>",
+                        "<div class=\"js-embed\">
+                            <iframe 
+                                src=\"{}\"
+                                title=\"Embedded content\"
+                                {}{} 
+                                frameborder=\"0\"/>
+                            </iframe>
+                            {}
+                        </div>",
                         url,
+                        if let Some(width) = data.width {
+                            format!(" width=\"{}\"", width)
+                        } else {
+                            String::new()
+                        },
+                        if let Some(height) = data.height {
+                            format!(" height=\"{}\"", height)
+                        } else {
+                            String::new()
+                        },
                         if let Some(caption) = data.caption {
                             format!("<p>{}</p>", caption)
                         } else {
@@ -291,6 +309,18 @@ pub fn to_html(str: &str) -> Result<String> {
                     t = tag,
                     v = data.text.unwrap_or_default()
                 ))
+            }
+            "attaches" => {
+                if let Some(file) = data.file {
+                    html_string.push_str(&format!(
+                        "<div class=\"js-attaches\">
+                            <iframe src=\"{}\"></iframe>
+                            <p>{}</p>
+                        </div>",
+                        file.url,
+                        data.title.unwrap_or_default()
+                    ));
+                }
             }
             _ => log::error!(
                 "editor2html library doesn't support for the {}",

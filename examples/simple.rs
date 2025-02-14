@@ -172,6 +172,29 @@ fn main() {
                 "withBackground": true,
                 "stretched": true
             }
+        },
+        {
+            "type" : "attaches",
+            "data" : {
+                "file": {
+                    "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg",
+                    "size": 91,
+                    "name": "hero.jpg",
+                    "extension": "jpg"
+                },
+                "title": "Hero"
+            }
+        },
+        {
+            "type" : "embed",
+            "data" : {
+                "service" : "youtube",
+                "source" : "https://youtube.com/shorts/toamvmz7Vcw?si=cfnTbtHHjVTFPBeK",
+                "embed" : "https://youtube.com/shorts/toamvmz7Vcw?si=cfnTbtHHjVTFPBeK",
+                "width" : 580,
+                "height" : 320,
+                "caption" : "My Life"
+            }
         }
         ],
         "version" : "2.24.3"
