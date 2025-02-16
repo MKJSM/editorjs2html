@@ -18,7 +18,14 @@ jobs:
           target: aarch64-unknown-linux-gnu
 
       - name: Cache Cargo Dependencies
-        uses: Swatinem/rust-cache@v2
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo
+            target
+          key: cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            cargo-${{ runner.os }}-
 
       - name: Verify Cargo Package
         run: cargo package # Ensures package builds correctly before publishing
