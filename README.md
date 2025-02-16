@@ -15,10 +15,9 @@ This library supports conversion for the following Editor.js block types with co
 |--------------------------------|------------------|
 | Header / Header with alignment | `js-head`        |
 | Paragraph                      | `js-para`        |
-| List / Nested List             | `js-list`        |
+| List / Nested List / Checklist | `js-list`        |
 | Table                          | `js-table`       |
 | Quote                          | `js-quote`       |
-| Checklist                      | `js-checklist`   |
 | Code                           | `js-code`        |
 | Link                           | `js-link`        |
 | Inline Text                    | `js-inline`      |
@@ -29,9 +28,10 @@ This library supports conversion for the following Editor.js block types with co
 | Alert                          | `js-alert`       |
 | Title                          | `js-title`       |
 | Attaches                       | `js-attaches`    |
+| Delimiter                      | -                |
 
 **Note**:
-- Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class.
+- Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class.(this only for older version of [checklist](https://github.com/editor-js/checklist))
 - Alert blocks (`js-alert`) have subclasses for different alert types:
   - `js-alert-primary`
   - `js-alert-secondary`

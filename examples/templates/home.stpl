@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Content Viewer</title>
+		<style>
+			/* General Styles */
+			body {
+				font-family: Arial, sans-serif;
+				margin: 20px;
+				background-color: #f8f9fa;
+			}
+
+			.container {
+				max-width: 800px;
+				margin: auto;
+				background: #fff;
+				padding: 20px;
+				border-radius: 8px;
+				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+			}
+
+			/* Headings */
+			.js-head h2,
+			.js-head h3 {
+				border-bottom: 2px solid #007bff;
+				padding-bottom: 5px;
+				margin-bottom: 10px;
+			}
+
+			/* Paragraphs */
+			.js-para p {
+				font-size: 16px;
+				line-height: 1.6;
+				margin-bottom: 10px;
+			}
+
+			/* Lists */
+			.js-list ul,
+			.js-list ol {
+				padding-left: 20px;
+			}
+
+			.js-list li {
+				margin-bottom: 5px;
+			}
+
+			/* Tables */
+			.js-table table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+			.js-table th,
+			.js-table td {
+				border: 1px solid #ddd;
+				padding: 8px;
+				text-align: left;
+			}
+
+			.js-table th {
+				background-color: #007bff;
+				color: white;
+			}
+
+			/* Quotes */
+			.js-quote blockquote {
+				font-style: italic;
+				border-left: 4px solid #007bff;
+				padding-left: 10px;
+				margin: 10px 0;
+			}
+
+			/* Alerts */
+			.js-alert {
+				padding: 10px;
+				margin: 10px 0;
+				border-radius: 5px;
+			}
+
+			.js-alert-primary {
+				background-color: #cce5ff;
+				color: #004085;
+			}
+			.js-alert-secondary {
+				background-color: #e2e3e5;
+				color: #383d41;
+			}
+			.js-alert-success {
+				background-color: #d4edda;
+				color: #155724;
+			}
+			.js-alert-info {
+				background-color: #d1ecf1;
+				color: #0c5460;
+			}
+			.js-alert-warning {
+				background-color: #fff3cd;
+				color: #856404;
+			}
+			.js-alert-danger {
+				background-color: #f8d7da;
+				color: #721c24;
+			}
+			.js-alert-light {
+				background-color: #fefefe;
+				color: #818182;
+			}
+			.js-alert-dark {
+				background-color: #d6d8d9;
+				color: #1b1e21;
+			}
+
+			/* Code Blocks */
+			.js-code pre {
+				background: #272822;
+				color: #f8f8f2;
+				padding: 10px;
+				border-radius: 5px;
+				overflow-x: auto;
+			}
+
+			/* Embedded Content */
+			.js-embed iframe,
+			.js-attaches iframe {
+				width: 100%;
+				height: 320px;
+				border-radius: 5px;
+			}
+
+			/* Images */
+			.js-image img {
+				max-width: 100%;
+				border-radius: 5px;
+			}
+
+			/* Buttons */
+			.button {
+				background: #007bff;
+				color: white;
+				padding: 10px 20px;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				text-decoration: none;
+				display: inline-block;
+			}
+			.button:hover {
+				background: #0056b3;
+			}
+
+			/* Checklist Styles */
+			.js-checklist ul {
+				list-style: none; /* Remove default bullets */
+				padding-left: 0;
+			}
+
+			.js-checklist li {
+				display: block; /* Ensure items are stacked vertically */
+				margin-bottom: 5px;
+				position: relative;
+			}
+
+			/* Align checkboxes and text properly */
+			.js-checklist .checkbox-container {
+				display: flex;
+				align-items: center;
+			}
+
+			.js-checklist input[type="checkbox"] {
+				margin-right: 8px;
+				transform: scale(1.2); /* Slightly larger checkboxes */
+				cursor: not-allowed; /* Indicate checkboxes are disabled */
+			}
+
+			/* Proper indentation for nested checklists */
+			.js-checklist ul ul {
+				padding-left: 15px; /* Indent nested checklists */
+				margin-left: 10px;
+			}
+
+			/* Style checked items */
+			.js-checklist input[type="checkbox"]:checked + label {
+				text-decoration: line-through; /* Strike-through completed tasks */
+				color: #6c757d; /* Dim completed task text */
+			}
+
+			/* Ensure labels take full width */
+			.js-checklist label {
+				font-size: 16px;
+				display: inline-block;
+				cursor: pointer;
+				user-select: none;
+			}
+		</style>
+		<!-- Highlight.js CSS (Choose a theme) -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css"
+		/>
+		<!-- Highlight.js Script (with all languages) -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+		<script>
+			hljs.highlightAll();
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Content Viewer</h1>
+			<div id="content"><%- self.data %></div>
+			<a href="/editorjs" class="button">Edit Content</a>
+		</div>
+	</body>
+</html>

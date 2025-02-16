@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>404 - Page Not Found</title>
+		<style>
+			:root {
+				--gradient-1: #0f0c29;
+				--gradient-2: #302b63;
+				--gradient-3: #24243e;
+				--accent: #00ff88;
+				--glow: 0 0 30px rgba(0, 255, 136, 0.3);
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: "Poppins", sans-serif;
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: linear-gradient(
+					135deg,
+					var(--gradient-1),
+					var(--gradient-2),
+					var(--gradient-3)
+				);
+				color: white;
+				overflow: hidden;
+			}
+
+			.container {
+				position: relative;
+				z-index: 2;
+				text-align: center;
+				padding: 2rem;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.error-code {
+				font-size: 20vh;
+				font-weight: 900;
+				background: linear-gradient(45deg, var(--accent), #00d4ff);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				text-shadow: var(--glow);
+				animation: glow 2s ease-in-out infinite;
+				margin-bottom: -2vh;
+			}
+
+			h1 {
+				font-size: 5vh;
+				margin: 1vh 0;
+				letter-spacing: 1px;
+				text-shadow: var(--glow);
+			}
+
+			p {
+				font-size: 2.5vh;
+				margin-bottom: 4vh;
+				opacity: 0.9;
+				max-width: 80%;
+				line-height: 1.8;
+			}
+
+			.cta-button {
+				display: inline-flex;
+				align-items: center;
+				padding: 2vh 6vh;
+				background: linear-gradient(45deg, var(--accent), #00d4ff);
+				color: #000;
+				text-decoration: none;
+				border-radius: 50px;
+				font-weight: bold;
+				position: relative;
+				overflow: hidden;
+				transition: all 0.4s ease;
+				box-shadow: 0 5px 20px rgba(0, 255, 136, 0.3);
+				font-size: 2.5vh;
+			}
+
+			.cta-button::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(
+					90deg,
+					transparent,
+					rgba(255, 255, 255, 0.4),
+					transparent
+				);
+				transition: 0.5s;
+			}
+
+			.cta-button:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 40px rgba(0, 255, 136, 0.6);
+			}
+
+			.cta-button:hover::before {
+				left: 100%;
+			}
+
+			.astronaut {
+				width: 25vh;
+				margin: 4vh auto;
+				animation: float 6s ease-in-out infinite;
+				filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.4));
+			}
+
+			.stars {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				pointer-events: none;
+				overflow: hidden;
+			}
+
+			@keyframes glow {
+				0%,
+				100% {
+					filter: brightness(1);
+				}
+				50% {
+					filter: brightness(1.3);
+				}
+			}
+
+			@keyframes float {
+				0%,
+				100% {
+					transform: translateY(0) rotate(0deg);
+				}
+				25% {
+					transform: translateY(-2vh) rotate(2deg);
+				}
+				50% {
+					transform: translateY(0) rotate(0deg);
+				}
+				75% {
+					transform: translateY(-2vh) rotate(-2deg);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="stars" id="stars"></div>
+		<div class="container">
+			<div class="error-code">404</div>
+			<img
+				src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDUiIGZpbGw9IiMwMGZmODgiLz48cGF0aCBkPSJNMzUgNjVsMTUgMTVtMTUtMTUtMTUgMTUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PHBhdGggZD0iTTYwIDY1bDE1IDE1bS0xNS0xNSAxNSAxNSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4="
+				alt="Astronaut"
+				class="astronaut"
+			/>
+			<h1>Lost in the Digital Cosmos</h1>
+			<p>
+				This page has drifted into the unknown. Let's navigate back to familiar
+				territory.
+			</p>
+			<a href="/" class="cta-button">Return to Safety</a>
+		</div>
+
+		<script>
+			// Enhanced starfield animation
+			function createStars() {
+				const container = document.getElementById("stars");
+				const starCount = 200;
+				const starTypes = ["small", "medium", "large"];
+
+				for (let i = 0; i < starCount; i++) {
+					const star = document.createElement("div");
+					const type = starTypes[Math.floor(Math.random() * starTypes.length)];
+
+					star.className = `star ${type}`;
+					star.style.left = Math.random() * 100 + "%";
+					star.style.top = Math.random() * 100 + "%";
+					star.style.animationDelay = Math.random() * 5 + "s";
+
+					container.appendChild(star);
+				}
+			}
+
+			// Add star animation styles
+			const style = document.createElement("style");
+			style.textContent = `
+            .star {
+                position: absolute;
+                background: white;
+                border-radius: 50%;
+                animation: twinkle 3s infinite ease-in-out;
+            }
+            
+            .star.small {
+                width: 1px;
+                height: 1px;
+                opacity: 0.8;
+            }
+            
+            .star.medium {
+                width: 2px;
+                height: 2px;
+                opacity: 0.6;
+            }
+            
+            .star.large {
+                width: 3px;
+                height: 3px;
+                opacity: 0.4;
+            }
+            
+            @keyframes twinkle {
+                0%, 100% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.5); opacity: 0.5; }
+            }
+        `;
+			document.head.appendChild(style);
+
+			createStars();
+		</script>
+	</body>
+</html>

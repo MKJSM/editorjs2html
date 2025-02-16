@@ -199,6 +199,6 @@ fn main() {
         ],
         "version" : "2.24.3"
     });
-    let html_content = editorjs2html::to_html(&content.to_string()).unwrap();
+    let html_content = editorjs2html::string_to_html(&content.to_string()).unwrap();
     println!("converted to html: {}", html_content)
 }

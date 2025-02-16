@@ -1,6 +1,6 @@
 [package]
 name = "editorjs2html"
-version = "0.1.6"
+version = "0.1.7"
 edition = "2021"
 authors = ["JS <mkjsm57@gmail.com>"]
 license = "MIT OR Apache-2.0"
@@ -13,13 +13,9 @@ documentation = "https://docs.rs/editorjs2html"
 
 [dependencies]
 anyhow = "1.0.95"
+log = { version = "0.4.25" }
 serde = { version = "1.0.217", features = ["derive"] }
 serde_json = { version = "1.0.138" }
-log = { version = "0.4.25" }
-
-[[example]]
-name = "simple"
-path = "./examples/simple.rs"
 
 [badges]
 maintenance = { status = "actively-developed" }
@@ -31,3 +27,19 @@ lto = "fat"       # Link Time Optimization (LTO) for better performance
 codegen-units = 1 # Improve optimization at the cost of compile time
 panic = "abort"   # Smaller binary size by removing unwind handling
 strip = "symbols" # Reduce binary size while keeping backtrace support
+
+[dev-dependencies]
+actix-files = "0.6.6"
+actix-web = "4.9.0"
+sailfish = { version = "0.9.0", features = ["json", "serde", "serde_json"] }
+tokio = { version = "1.43.0", features = ["full"] }
+tracing-actix-web = "0.7.15"
+tracing-subscriber = "0.3.19"
+
+[[example]]
+name = "simple"
+path = "./examples/simple.rs"
+
+[[example]]
+name = "actix"
+path = "./examples/actix.rs"

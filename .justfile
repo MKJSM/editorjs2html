@@ -10,3 +10,12 @@ clean:
 
 run:
     cargo run --example simple
+
+actix:
+    cargo run --example actix
+
+check:
+    cargo clippy
+
+verify:
+    cargo publish --dry-run

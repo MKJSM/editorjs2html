@@ -53,6 +53,7 @@ pub struct Data {
 pub struct ListItem {
     pub content: String,
     pub items: Vec<ListItem>,
+    pub meta: Meta,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -64,4 +65,10 @@ pub struct ChecklistItem {
 #[derive(Deserialize, Debug, Clone)]
 pub struct File {
     pub url: String,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct Meta {
+    #[serde(default)]
+    pub checked: bool,
 }
