@@ -1,5 +1,7 @@
 // Editorjs2Html
-
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/MKJSM/MKJS/refs/heads/main/mkjs_circle.png"
+)]
 use anyhow::{anyhow, Result};
 
 mod models;
