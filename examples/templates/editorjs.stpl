@@ -57,10 +57,11 @@
 		<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script>
+		<!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script> -->
 		<script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script>
 		<script src="https://cdn.jsdelivr.net/npm/editorjs-alert@latest"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@coolbytes/editorjs-delimiter"></script>
 	</head>
 	<body>
 		<div class="container">

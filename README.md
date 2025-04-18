@@ -31,7 +31,17 @@ This library supports conversion for the following Editor.js block types with co
 | Delimiter                      | -                |
 
 **Note**:
-- Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class.(this only for older version of [checklist](https://github.com/editor-js/checklist))
+- `Inline Text` blocks (`js-inline`) support the following styles based on flags (in order):  
+  - `bold` → `<b>`  
+  - `italic` → `<i>`  
+  - `underline` → `<u>`  
+  - `marker` → `<mark>`  
+  - `inline_code` → `<code>`  
+  The styles are applied in sequence and the final HTML is wrapped in a div like:  
+  ```html
+  <div class="js-inline"><code><mark><u><i><b>Text</b></i></u></mark></code></div>
+  ```
+- Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class. (this only for older version of [checklist](https://github.com/editor-js/checklist))
 - Alert blocks (`js-alert`) have subclasses for different alert types:
   - `js-alert-primary`
   - `js-alert-secondary`
@@ -45,6 +55,9 @@ This library supports conversion for the following Editor.js block types with co
   - `js-image--stretched` (if `stretched` is `true`)
   - `js-image--bordered` (if `withBorder` is `true`)
   - `js-image--background` (if `withBackground` is `true`)
+- We support both delimiter block plugins:
+  - [delimiter](https://github.com/editor-js/delimiter)
+  - [editorjs-delimiter](https://github.com/PirateDevCom/editorjs-delimiter)
 
 ## Installation
 ```sh
@@ -93,6 +106,18 @@ fn main() {
                     "withBackground" : true,
                     "stretched" : true
                 }
+            },
+            {
+                "id": "inline1",
+                "type": "inlinetext",
+                "data": {
+                    "text": "Hello",
+                    "bold": true,
+                    "italic": true,
+                    "underline": true,
+                    "marker": true,
+                    "inline_code": true
+                }
             }
         ]
     });
@@ -109,6 +134,11 @@ For the above JSON input, the generated HTML for the `Image` block will look lik
     <img src="https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg" alt="Roadster // tesla.com">
     <p>Roadster // tesla.com</p>
 </div>
+```
+
+### Example Output for Inline Text Block
+```html
+<div class="js-inline"><code><mark><u><i><b>Hello</b></i></u></mark></code></div>
 ```
 
 ## Styling

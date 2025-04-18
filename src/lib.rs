@@ -356,7 +356,41 @@ fn to_html(document: Document) -> String {
                     ));
                 }
             }
-            "delimiter" => html_string.push_str("</br>"),
+            "delimiter" => {
+                let html = if let Some(style) = data.style {
+                    let line_width = data.line_width.unwrap_or(25);
+                    let line_thickness = data.line_thickness.unwrap_or(2);
+                    match style.as_str() {
+                        "star" => "<div style=\"text-align: center;\">***</div>",
+                        "dash" => "<div style=\"text-align: center;\">---</div>",
+                        "line" => {
+                            let valid_widths = [8, 15, 25, 35, 50, 60, 100];
+                            let valid_thicknesses = [1, 2, 3, 4, 5, 6];
+
+                            let safe_width = if valid_widths.contains(&line_width) {
+                                line_width
+                            } else {
+                                25
+                            };
+
+                            let safe_thickness = if valid_thicknesses.contains(&line_thickness) {
+                                line_thickness
+                            } else {
+                                2
+                            };
+
+                            &format!(
+                                "<hr style=\"width: {}%; border: none; border-top: {}px solid #000; margin: 1em auto;\" />",
+                                safe_width, safe_thickness
+                            )
+                        }
+                        _ => "</br>",
+                    }
+                } else {
+                    "</br>"
+                };
+                html_string.push_str(html)
+            }
             _ => log::error!(
                 "editor2html library doesn't support for the {}",
                 block.r#type
