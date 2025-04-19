@@ -49,6 +49,8 @@ pub struct Data {
     pub with_headings: Option<bool>,
     pub line_width: Option<u32>,
     pub line_thickness: Option<u32>,
+    pub fk: Option<String>,
+    pub status: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

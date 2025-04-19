@@ -28,6 +28,7 @@ This library supports conversion for the following Editor.js block types with co
 | Alert                          | `js-alert`       |
 | Title                          | `js-title`       |
 | Attaches                       | `js-attaches`    |
+| Toggle                       | `js-toggle`    |
 | Delimiter                      | -                |
 
 **Note**:
@@ -58,6 +59,9 @@ This library supports conversion for the following Editor.js block types with co
 - We support both delimiter block plugins:
   - [delimiter](https://github.com/editor-js/delimiter)
   - [editorjs-delimiter](https://github.com/PirateDevCom/editorjs-delimiter)
+- Toggle blocks (`js-toggle`) support the following modifier classes:
+  - `js-toggle-label`
+  - `js-toggle-content`
 
 ## Installation
 ```sh

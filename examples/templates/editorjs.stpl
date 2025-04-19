@@ -62,6 +62,7 @@
 		<script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script>
 		<script src="https://cdn.jsdelivr.net/npm/editorjs-alert@latest"></script>
 		<script src="https://cdn.jsdelivr.net/npm/@coolbytes/editorjs-delimiter"></script>
+		<script src="https://cdn.jsdelivr.net/npm/editorjs-toggle-block"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -118,6 +119,10 @@
 						quote: Quote,
 						warning: Warning,
 						alert: Alert,
+						toggle: {
+							class: ToggleBlock,
+							inlineToolbar: true,
+						},
 					},
 					data: existingContent,
 				});
