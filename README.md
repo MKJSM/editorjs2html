@@ -28,8 +28,9 @@ This library supports conversion for the following Editor.js block types with co
 | Alert                          | `js-alert`       |
 | Title                          | `js-title`       |
 | Attaches                       | `js-attaches`    |
-| Toggle                       | `js-toggle`    |
-| Delimiter                      | -                |
+| Toggle                         | `js-toggle`      |
+| Delimiter                      | `js-delimiter`   |
+| Button                         | `js-button`      |
 
 **Note**:
 - `Inline Text` blocks (`js-inline`) support the following styles based on flags (in order):  

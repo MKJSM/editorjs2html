@@ -289,8 +289,8 @@ pub fn render_block(block: Block) -> String {
                 let line_width = data.line_width.unwrap_or(25);
                 let line_thickness = data.line_thickness.unwrap_or(2);
                 match style.as_str() {
-                    "star" => "<div style=\"text-align: center;\">***</div>",
-                    "dash" => "<div style=\"text-align: center;\">---</div>",
+                    "star" => "<div class=\"js-delimiter\" style=\"text-align: center;\">***</div>",
+                    "dash" => "<div class=\"js-delimiter\" style=\"text-align: center;\">---</div>",
                     "line" => {
                         let valid_widths = [8, 15, 25, 35, 50, 60, 100];
                         let valid_thicknesses = [1, 2, 3, 4, 5, 6];
@@ -308,16 +308,27 @@ pub fn render_block(block: Block) -> String {
                         };
 
                         &format!(
-                            "<hr style=\"width: {}%; border: none; border-top: {}px solid #000; margin: 1em auto;\" />",
+                            "<div class=\"js-delimiter\">
+                                <hr style=\"width: {}%; border: none; border-top: {}px solid #000; margin: 1em auto;\" />
+                            </div>",
                             safe_width, safe_thickness
                         )
                     }
-                    _ => "</br>",
+                    _ => "<div class=\"js-delimiter\"></br></div>",
                 }
             } else {
-                "</br>"
+                "<div class=\"js-delimiter\"></br></div>"
             };
             html_string.push_str(html)
+        }
+        "anybutton" => {
+            html_string.push_str(&format!(
+                "<div class=\"js-button\">
+                    <a href=\"{}\" target=\"_blank\" rel=\"noopener noreferrer\"><button>{}</button></a>
+                </div>",
+                data.link.unwrap_or_default(),
+                data.text.unwrap_or_default()
+            ));
         }
         _ => log::error!(
             "editor2html library doesn't support for the {}",
