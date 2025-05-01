@@ -9,6 +9,7 @@
         "onclick",
         "OOOW",
         "println",
-        "serde"
+        "serde",
+        "stylesheet"
     ]
 }

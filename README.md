@@ -1,227 +1,146 @@
 # Editorjs2html
 
-`editorjs2html` is a utility that converts [Editor.js](https://editorjs.io/) output into HTML.
+A Rust library that converts [Editor.js](https://editorjs.io/) output into clean HTML with semantic CSS classes.
 
 ## Features
-- Supports multiple Editor.js block types
-- Converts structured JSON data into clean HTML with semantic CSS classes
-- Easy to use and integrate into projects
-- Includes custom CSS classes for styling flexibility
 
-## Supported Block Types
-This library supports conversion for the following Editor.js block types with corresponding CSS classes:
-
-| Block Type                     | Class Name       |
-|--------------------------------|------------------|
-| Header / Header with alignment | `js-head`        |
-| Paragraph                      | `js-para`        |
-| List / Nested List / Checklist | `js-list`        |
-| Table                          | `js-table`       |
-| Quote                          | `js-quote`       |
-| Code                           | `js-code`        |
-| Link                           | `js-link`        |
-| Inline Text                    | `js-inline`      |
-| Warning                        | `js-warning`     |
-| Image / Simple Image           | `js-image`       |
-| Embed                          | `js-embed`       |
-| Raw Input                      | `js-raw`         |
-| Alert                          | `js-alert`       |
-| Title                          | `js-title`       |
-| Attaches                       | `js-attaches`    |
-| Toggle                         | `js-toggle`      |
-| Delimiter                      | `js-delimiter`   |
-| Button                         | `js-button`      |
-
-**Note**:
-- `Inline Text` blocks (`js-inline`) support the following styles based on flags (in order):  
-  - `bold` → `<b>`  
-  - `italic` → `<i>`  
-  - `underline` → `<u>`  
-  - `marker` → `<mark>`  
-  - `inline_code` → `<code>`  
-  The styles are applied in sequence and the final HTML is wrapped in a div like:  
-  ```html
-  <div class="js-inline"><code><mark><u><i><b>Text</b></i></u></mark></code></div>
-  ```
-- Checklist blocks (`js-checklist`) contain individual checkbox items each wrapped in a `div` with the `js-checkbox` class. (this only for older version of [checklist](https://github.com/editor-js/checklist))
-- Alert blocks (`js-alert`) have subclasses for different alert types:
-  - `js-alert-primary`
-  - `js-alert-secondary`
-  - `js-alert-info`
-  - `js-alert-success`
-  - `js-alert-warning`
-  - `js-alert-danger`
-  - `js-alert-light`
-  - `js-alert-dark`
-- Image blocks (`js-image`) support the following modifier classes:
-  - `js-image--stretched` (if `stretched` is `true`)
-  - `js-image--bordered` (if `withBorder` is `true`)
-  - `js-image--background` (if `withBackground` is `true`)
-- We support both delimiter block plugins:
-  - [delimiter](https://github.com/editor-js/delimiter)
-  - [editorjs-delimiter](https://github.com/PirateDevCom/editorjs-delimiter)
-- Toggle blocks (`js-toggle`) support the following modifier classes:
-  - `js-toggle-label`
-  - `js-toggle-content`
+- Comprehensive support for Editor.js block types
+- Clean HTML output with semantic CSS classes
+- URL validation and HTML escaping for security
+- Efficient string handling and memory usage
+- Highly configurable styling options
+- Built-in accessibility features
 
 ## Installation
+
 ```sh
 cargo add editorjs2html
 ```
 
-## Usage
+## Quick Start
+
 ```rust
+use editorjs2html::string_to_html;
+
 fn main() {
-    let content = serde_json::json!({
-        "time" : 1669380869051i64,
-        "blocks" : [
-            {
-                "id" : "6eo72OOOW7",
-                "type" : "header",
-                "data" : {
-                    "text" : "Editor.js",
-                    "level" : 2
-                }
-            },
-            {
-                "id" : "6eo72OOOW7",
-                "type" : "table",
-                "data" : {
-                    "withHeadings": true,
-                    "stretched": false,
-                    "content" : [ [ "Kine", "Pigs", "Chicken" ], [ "1 pcs", "3 pcs", "12 pcs" ], [ "100$", "200$", "150$" ] ]
-                }
-            },
-            {
-                "id" : "af5jCp7vmJ",
-                "type" : "paragraph",
-                "data" : {
-                    "text" : "Hey. Meet the new Editor. On this page you can see it in action — try to edit this text."
-                }
-            },
-            {
-                "id" : "image1",
-                "type" : "image",
-                "data" : {
-                    "file" : {
-                        "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg"
-                    },
-                    "caption" : "Roadster // tesla.com",
-                    "withBorder" : false,
-                    "withBackground" : true,
-                    "stretched" : true
-                }
-            },
-            {
-                "id": "inline1",
-                "type": "inlinetext",
-                "data": {
-                    "text": "Hello",
-                    "bold": true,
-                    "italic": true,
-                    "underline": true,
-                    "marker": true,
-                    "inline_code": true
-                }
+    let content = r#"{
+        "blocks": [{
+            "type": "header",
+            "data": {
+                "text": "Hello World",
+                "level": 2
             }
-        ]
-    });
-    let html_content = editorjs2html::to_html(&content.to_string()).unwrap();
-    println!("converted to html: {}", html_content)
+        }]
+    }"#;
+    
+    let html = string_to_html(content).unwrap();
+    println!("{}", html);
 }
 ```
 
-### Example Output for Image Block
-For the above JSON input, the generated HTML for the `Image` block will look like this:
+## Supported Block Types
 
-```html
-<div class="js-image js-image--stretched js-image--background">
-    <img src="https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg" alt="Roadster // tesla.com">
-    <p>Roadster // tesla.com</p>
-</div>
-```
+| Block Type         | Class Name     | Additional Classes/Notes       |
+|--------------------|----------------|--------------------------------|
+| Header / Heading   | `js-head`      | Supports alignment             |
+| Paragraph          | `js-para`      | Supports alignment             |
+| List / Nested List | `js-list`      | Supports ordered/unordered     |
+| Checklist          | `js-checklist` | `js-checkbox` for items        |
+| Table              | `js-table`     | Supports headers               |
+| Quote              | `js-quote`     | Supports alignment             |
+| Code               | `js-code`      | Supports language highlighting |
+| Link               | `js-link`      | Opens in new tab               |
+| Inline Text        | `js-inline`    | Multiple formatting options    |
+| Warning            | `warning`      | Title + message format         |
+| Image              | `js-image`     | Multiple display options       |
+| Embed              | `js-embed`     | Supports various platforms     |
+| Raw HTML           | `js-raw`       | Direct HTML insertion          |
+| Alert              | `js-alert`     | Multiple types (see below)     |
+| Title              | `js-title`     | Custom styling options         |
+| Attaches           | `js-attaches`  | File attachments               |
+| Toggle             | `js-toggle`    | Expandable content             |
+| Delimiter          | `js-delimiter` | Multiple styles                |
+| Button             | `js-button`    | Interactive elements           |
 
-### Example Output for Inline Text Block
-```html
-<div class="js-inline"><code><mark><u><i><b>Hello</b></i></u></mark></code></div>
-```
+### Block-Specific Details
+
+#### Alert Types
+Available classes for alerts:
+- `js-alert-primary`
+- `js-alert-secondary` 
+- `js-alert-info`
+- `js-alert-success`
+- `js-alert-warning`
+- `js-alert-danger`
+- `js-alert-light`
+- `js-alert-dark`
+
+#### Image Modifiers
+Additional classes for images:
+- `js-image--stretched` - Full width
+- `js-image--bordered` - With border
+- `js-image--background` - With background
+
+#### Inline Text Formatting
+Applied in this order:
+1. `bold` → `<b>`
+2. `italic` → `<i>` 
+3. `underline` → `<u>`
+4. `marker` → `<mark>`
+5. `inline_code` → `<code>`
 
 ## Styling
-The generated HTML includes semantic CSS classes for each block type, allowing you to apply custom styles. Use the corresponding class names from the Supported Block Types table to target specific elements in your CSS.
 
-Example styling for headers:
+The library generates semantic HTML with consistent class names for styling. Example:
+
 ```css
+/* Headers */
 .js-head h2 {
-  color: #2c3e50;
-  font-family: system-ui;
+    color: #2c3e50;
+    margin: 1.5em 0 1em;
+}
+
+/* Lists */
+.js-list {
+    padding-left: 1.5em;
+}
+
+/* Code blocks */
+.js-code {
+    background: #f8f9fa;
+    padding: 1em;
+    border-radius: 4px;
 }
 ```
 
-Styling checklist items:
-```css
-.js-checkbox {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-```
+## Contributing
 
-Styling image blocks:
-```css
-.js-image {
-  margin: 1rem 0;
-}
-
-.js-image--stretched {
-  width: 100%;
-}
-
-.js-image--bordered {
-  border: 2px solid #ccc;
-}
-
-.js-image--background {
-  background-color: #f5f5f5;
-  padding: 1rem;
-}
-```
-
-## One-Time Setup
+1. Install development tools:
 ```sh
 cargo install just
 just setup
 ```
 
-### Git Message Validator
-This repository includes a Git message validator to enforce structured commit messages.
+2. Commit messages must follow the format:
+```
+<type>: <description>
 
-### Contributor Setup
-To ensure all contributors follow the same commit message format, run:
-```sh
-just setup
+Types:
+- feat:  New features
+- fix:   Bug fixes
+- docs:  Documentation
+- style: Code style changes
+- ref:   Refactoring
+- test:  Testing
+- perf:  Performance
 ```
 
-After setup, commit messages must follow the format:
-```text
-<type>: <subject>
-```
+3. Submit a pull request
 
-**Example:**
-```text
-feat: add button component
-```
+## License
 
-### Allowed Commit Types
-- feat  - New feature implementation
-- fix   - Bug fixes
-- docs  - Documentation updates
-- style - Code style changes (formatting, missing semicolons, etc.)
-- ref   - Code refactoring without changing functionality
-- test  - Adding or updating tests
-- rev   - Code review changes
-- perf  - Performance improvements
-- proj  - Project-related tasks (configuration, build scripts, dependencies, etc.)
-- lint  - Linting fixes and improvements
+Licensed under either:
+- Apache License, Version 2.0
+- MIT license
 
-## Contributing
-Contributions are welcome! Feel free to open issues or submit pull requests.
+at your option.

@@ -16,6 +16,7 @@ anyhow = "1.0.95"
 log = { version = "0.4.25" }
 serde = { version = "1.0.217", features = ["derive"] }
 serde_json = { version = "1.0.138" }
+url = "2.5.4"
 
 [badges]
 maintenance = { status = "actively-developed" }

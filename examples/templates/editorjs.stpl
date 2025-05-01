@@ -1,155 +1,199 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Content Editor</title>
-		<style>
-			body {
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-					sans-serif;
-				margin: 0;
-				padding: 0;
-				background-color: #f5f5f5;
-				height: 100vh;
-				overflow: hidden;
-			}
-			.container {
-				max-width: 800px;
-				margin: 0 auto;
-				background: white;
-				padding: 30px;
-				border-radius: 8px;
-				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-				height: 90vh;
-				display: flex;
-				flex-direction: column;
-			}
-			#editorjs {
-				border: 1px solid #e0e0e0;
-				padding: 20px;
-				margin: 20px 0;
-				flex: 1;
-				overflow-y: auto;
-			}
-			.button {
-				background: #007bff;
-				color: white;
-				padding: 10px 20px;
-				border: none;
-				border-radius: 4px;
-				cursor: pointer;
-				text-decoration: none;
-				display: inline-block;
-			}
-			.button:hover {
-				background: #0056b3;
-			}
-			h1 {
-				color: #333;
-				margin-top: 0;
-			}
-		</style>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/underline@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
-		<!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script> -->
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/editorjs-alert@latest"></script>
-		<script src="https://cdn.jsdelivr.net/npm/@coolbytes/editorjs-delimiter"></script>
-		<script src="https://cdn.jsdelivr.net/npm/editorjs-toggle-block"></script>
-	</head>
-	<body>
-		<div class="container">
-			<h1>Content Editor</h1>
-			<div id="editorjs"></div>
-			<button id="saveBtn" class="button">Save Content</button>
-		</div>
 
-		<script>
-			document.addEventListener("DOMContentLoaded", async () => {
-				// Load existing content
-				let existingContent = { blocks: [] };
-				try {
-					const response = await fetch("/api/content", {
-						method: "GET",
-					});
-					if (response.ok) {
-						existingContent = await response.json();
-					}
-				} catch (error) {
-					console.error("Loading error:", error);
+<head>
+	<title>Content Editor</title>
+	<style>
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+				sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f5f5f5;
+			height: 100vh;
+			overflow: hidden;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			background: white;
+			padding: 30px;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			height: 90vh;
+			display: flex;
+			flex-direction: column;
+		}
+
+		#editorjs {
+			border: 1px solid #e0e0e0;
+			padding: 20px;
+			margin: 20px 0;
+			flex: 1;
+			overflow-y: auto;
+		}
+
+		.button {
+			background: #007bff;
+			color: white;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			text-decoration: none;
+			display: inline-block;
+		}
+
+		.button:hover {
+			background: #0056b3;
+		}
+
+		h1 {
+			color: #333;
+			margin-top: 0;
+		}
+
+		/* CodeBox styles */
+		.ce-code-box {
+			background: #1e1e1e;
+			border-radius: 4px;
+			margin: 10px 0;
+		}
+
+		/* Quote styles */
+		.ce-quote {
+			border-left: 3px solid #e0e0e0;
+			padding-left: 1em;
+		}
+
+		/* Alert styles */
+		.ce-alert {
+			padding: 15px;
+			border-radius: 4px;
+			margin: 10px 0;
+		}
+
+		/* Toggle styles */
+		.ce-toggle {
+			border: 1px solid #e0e0e0;
+			border-radius: 4px;
+			margin: 10px 0;
+		}
+	</style>
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/underline@latest"></script>
+	<script src="https://cdn.jsdelivr.net/gh/paraswaykole/editor-js-code@latest/dist/bundle.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script> -->
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script> -->
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/editorjs-alert@latest"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@coolbytes/editorjs-delimiter"></script>
+	<script src="https://cdn.jsdelivr.net/npm/editorjs-toggle-block"></script>
+</head>
+
+<body>
+	<div class="container">
+		<h1>Content Editor</h1>
+		<div id="editorjs"></div>
+		<button id="saveBtn" class="button">Save Content</button>
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", async () => {
+			// Load existing content
+			let existingContent = { blocks: [] };
+			try {
+				const response = await fetch("/api/content", {
+					method: "GET",
+				});
+				if (response.ok) {
+					existingContent = await response.json();
 				}
+			} catch (error) {
+				console.error("Loading error:", error);
+			}
 
-				// Initialize Editor
-				const editor = new EditorJS({
-					holder: "editorjs",
-					tools: {
-						header: {
-							class: Header,
-							config: {
-								placeholder: "Enter header",
-								levels: [2, 3, 4],
-								defaultLevel: 2,
-							},
-						},
-						paragraph: {
-							class: Paragraph,
-							inlineToolbar: true,
-						},
-						underline: Underline,
-						code: CodeTool,
-						table: Table,
-						list: {
-							class: EditorjsList,
-							inlineToolbar: true,
-							config: {
-								defaultStyle: "unordered",
-							},
-						},
-
-						image: SimpleImage,
-						embed: Embed,
-						delimiter: Delimiter,
-						quote: Quote,
-						warning: Warning,
-						alert: Alert,
-						toggle: {
-							class: ToggleBlock,
-							inlineToolbar: true,
+			// Initialize Editor
+			const editor = new EditorJS({
+				holder: "editorjs",
+				tools: {
+					header: {
+						class: Header,
+						config: {
+							placeholder: "Enter header",
+							levels: [2, 3, 4],
+							defaultLevel: 2,
 						},
 					},
-					data: existingContent,
-				});
-
-				// Save handler
-				document
-					.getElementById("saveBtn")
-					.addEventListener("click", async () => {
-						try {
-							const content = await editor.save();
-							const response = await fetch("/api/content", {
-								method: "POST",
-								headers: { "Content-Type": "application/json" },
-								body: JSON.stringify(content),
-							});
-
-							if (response.ok) {
-								window.location.href = "/";
-							} else {
-								alert("Save failed: " + (await response.text()));
+					paragraph: {
+						class: Paragraph,
+						inlineToolbar: true,
+					},
+					underline: Underline,
+					code: CodeTool,
+					table: Table,
+					list: {
+						class: EditorjsList,
+						inlineToolbar: true,
+						config: {
+							defaultStyle: "unordered",
+						},
+					},
+					image: SimpleImage,
+					embed: {
+						class: Embed,
+						config: {
+							services: {
+								youtube: true,
+								codesandbox: true,
+								codepen: true
 							}
-						} catch (error) {
-							console.error("Save error:", error);
-							alert("Save failed: " + error.message);
 						}
-					});
+					},
+					delimiter: Delimiter,
+					quote: Quote,
+					warning: Warning,
+					alert: Alert,
+					toggle: {
+						class: ToggleBlock,
+						inlineToolbar: true,
+					}
+				},
+				data: existingContent,
 			});
-		</script>
-	</body>
+
+			// Save handler
+			document
+				.getElementById("saveBtn")
+				.addEventListener("click", async () => {
+					try {
+						const content = await editor.save();
+						const response = await fetch("/api/content", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify(content),
+						});
+
+						if (response.ok) {
+							window.location.href = "/";
+						} else {
+							alert("Save failed: " + (await response.text()));
+						}
+					} catch (error) {
+						console.error("Save error:", error);
+						alert("Save failed: " + error.message);
+					}
+				});
+		});
+	</script>
+</body>
+
 </html>

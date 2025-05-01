@@ -52,6 +52,9 @@ pub struct Data {
     pub fk: Option<String>,
     pub status: Option<String>,
     pub link: Option<String>,
+    pub language_code: Option<String>,
+    pub language: Option<String>,
+    pub theme: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

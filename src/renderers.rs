@@ -1,5 +1,23 @@
 use crate::models::{Block, ChecklistItem, ListItem};
 
+const DEFAULT_HEADING_LEVEL: u8 = 4;
+const DEFAULT_LINE_WIDTH: u32 = 25;
+const DEFAULT_LINE_THICKNESS: u32 = 2;
+
+// Add this at the top of the file with other utility functions
+fn escape_html(s: &str) -> String {
+    s.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace("\"", "&quot;")
+        .replace("'", "&#39;")
+}
+
+// Add this function at the top
+fn is_valid_url(url: &str) -> bool {
+    url::Url::parse(url).is_ok()
+}
+
 fn form_list(items: &[ListItem], tag: &str, style: &str) -> String {
     let mut list = String::new();
     for item in items {
@@ -21,28 +39,34 @@ fn form_list(items: &[ListItem], tag: &str, style: &str) -> String {
         } else {
             String::new()
         };
-        list.push_str(&format!("<li>{}{}{}</li>", check, item.content, sub_items));
+        list.push_str(&format!(
+            "<li>{}{}{}</li>",
+            check,
+            escape_html(&item.content),
+            sub_items
+        ));
     }
     list
 }
 
-fn form_table(data: &Vec<String>, tag: &str) -> String {
-    let mut table_row = String::new();
-    for ele in data {
-        table_row.push_str(&format!("<{}>{}</{}>", tag, ele, tag));
-    }
-    format!("<tr>{}</tr>", table_row)
+fn form_table(data: &[String], tag: &str) -> String {
+    let cells = data
+        .iter()
+        .map(|ele| format!("<{}>{}</{}>", tag, escape_html(ele), tag))
+        .collect::<String>();
+    format!("<tr>{}</tr>", cells)
 }
 
 pub fn render_block(block: Block) -> String {
     let data = block.data;
     let mut html_string = String::new();
+
     match block.r#type.to_lowercase().as_str() {
         "header" | "heading" => {
             html_string.push_str(&format!(
                 "<div class=\"js-head\"{s}><h{l}>{t}</h{l}></div>",
-                l = data.level.unwrap_or(4),
-                t = data.text.unwrap_or_default(),
+                l = data.level.unwrap_or(DEFAULT_HEADING_LEVEL),
+                t = escape_html(&data.text.unwrap_or_default()),
                 s = if let Some(align) = data.align.clone() {
                     format!(" style=\"text-align: {};\"", align)
                 } else {
@@ -58,7 +82,7 @@ pub fn render_block(block: Block) -> String {
                 } else {
                     String::new()
                 },
-                data.text.unwrap_or_default(),
+                escape_html(&data.text.unwrap_or_default()),
             ));
         }
         "list" => {
@@ -102,8 +126,8 @@ pub fn render_block(block: Block) -> String {
             html_string.push_str(&format!(
                 "<div class=\"js-quote\"><blockquote style=\"text-align: {}\">{}</blockquote> - {}</div>",
                 data.alignment.unwrap_or_default(),
-                data.text.unwrap_or_default()
-                ,data.caption.unwrap_or_default()
+                escape_html(&data.text.unwrap_or_default()),
+                escape_html(&data.caption.unwrap_or_default())
             ));
         }
         "checklist" => {
@@ -114,7 +138,7 @@ pub fn render_block(block: Block) -> String {
                     checklist.push_str(&format!(
                         "<div class=\"js-checkbox\"><input type=\"checkbox\" {} disabled> {}</div>",
                         if item.checked { "checked" } else { "" },
-                        item.text
+                        escape_html(&item.text)
                     ));
                 }
                 html_string.push_str(&format!("<div class=\"js-checklist\">{}</div>", checklist));
@@ -122,19 +146,24 @@ pub fn render_block(block: Block) -> String {
         }
         "code" => {
             html_string.push_str(&format!(
-                "<div class=\"js-code\"><pre><xmp>{}</xmp></pre></div>",
-                data.code.unwrap_or_default()
+                "<div class=\"js-code{}\"><pre><xmp>{}</xmp></pre></div>",
+                if let Some(lang) = data.language_code {
+                    format!(" language-{}", lang)
+                } else {
+                    "".to_string()
+                },
+                escape_html(&data.code.unwrap_or_default())
             ));
         }
         "link" => {
             html_string.push_str(&format!(
                 "<div class=\"js-link\"><a href=\"{}\" target=\"_blank\">{}</a></div>",
-                data.url.unwrap_or_default(),
-                data.text.unwrap_or_default()
+                escape_html(&data.url.unwrap_or_default()),
+                escape_html(&data.text.unwrap_or_default())
             ));
         }
         "inlinetext" => {
-            let mut text = data.text.unwrap_or_default();
+            let mut text = escape_html(&data.text.unwrap_or_default());
             if data.bold.unwrap_or_default() {
                 text = format!("<b>{}</b>", text);
             }
@@ -155,8 +184,8 @@ pub fn render_block(block: Block) -> String {
         "warning" => {
             html_string.push_str(&format!(
                 "<div class=\"warning\"><strong>{}</strong><p>{}</p></div>",
-                data.title.unwrap_or_default(),
-                data.message.unwrap_or_default()
+                escape_html(&data.title.unwrap_or_default()),
+                escape_html(&data.message.unwrap_or_default())
             ));
         }
         "image" => {
@@ -165,7 +194,7 @@ pub fn render_block(block: Block) -> String {
             } else {
                 data.url.unwrap_or_default()
             };
-            if !url.is_empty() {
+            if !url.is_empty() && is_valid_url(&url) {
                 html_string.push_str(&format!(
                     r#"<div class="js-image{}{}{}">
                         <img src="{}"{}>{}
@@ -187,7 +216,7 @@ pub fn render_block(block: Block) -> String {
                     },
                     url,
                     if let Some(caption) = data.caption.clone() {
-                        format!(" alt=\"{}\"", caption)
+                        format!(" alt=\"{}\"", escape_html(&caption))
                     } else {
                         String::new()
                     },
@@ -269,7 +298,7 @@ pub fn render_block(block: Block) -> String {
                 "<div class=\"js-title\"><{t}{s}>{v}</{t}></div>",
                 s = style,
                 t = tag,
-                v = data.text.unwrap_or_default()
+                v = escape_html(&data.text.unwrap_or_default())
             ))
         }
         "attaches" => {
@@ -286,8 +315,8 @@ pub fn render_block(block: Block) -> String {
         }
         "delimiter" => {
             let html = if let Some(style) = data.style {
-                let line_width = data.line_width.unwrap_or(25);
-                let line_thickness = data.line_thickness.unwrap_or(2);
+                let line_width = data.line_width.unwrap_or(DEFAULT_LINE_WIDTH);
+                let line_thickness = data.line_thickness.unwrap_or(DEFAULT_LINE_THICKNESS);
                 match style.as_str() {
                     "star" => "<div class=\"js-delimiter\" style=\"text-align: center;\">***</div>",
                     "dash" => "<div class=\"js-delimiter\" style=\"text-align: center;\">---</div>",
@@ -298,13 +327,13 @@ pub fn render_block(block: Block) -> String {
                         let safe_width = if valid_widths.contains(&line_width) {
                             line_width
                         } else {
-                            25
+                            DEFAULT_LINE_WIDTH
                         };
 
                         let safe_thickness = if valid_thicknesses.contains(&line_thickness) {
                             line_thickness
                         } else {
-                            2
+                            DEFAULT_LINE_THICKNESS
                         };
 
                         &format!(
@@ -329,6 +358,18 @@ pub fn render_block(block: Block) -> String {
                 data.link.unwrap_or_default(),
                 data.text.unwrap_or_default()
             ));
+        }
+        "codeBox" => {
+            html_string.push_str(&format!(
+                "<div class=\"js-codeBox\">\n\
+                <pre class=\"language-{}\"><code>{}</code></pre>\n\
+                </div>",
+                data.language.unwrap_or("plaintext".to_string()),
+                escape_html(&data.code.unwrap_or_default())
+            ));
+            if let Some(t) = data.theme {
+                html_string.push_str(&format!("<link rel=\"stylesheet\" href=\"{t}.min.css\">",));
+            }
         }
         _ => log::error!(
             "editor2html library doesn't support for the {}",
