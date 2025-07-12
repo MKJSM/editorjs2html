@@ -18,4 +18,4 @@ check:
     cargo clippy
 
 verify:
-    cargo publish --dry-run
+    cargo publish --dry-run --allow-dirty

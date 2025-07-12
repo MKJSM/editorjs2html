@@ -119,7 +119,7 @@ fn to_html(document: Document) -> String {
                 if let Some(count) = item.as_u64() {
                     has_toggle = true;
                     let label = block.data.text.unwrap_or_else(|| "Toggle".to_string());
-                    let fk = block.data.fk.unwrap_or_else(|| format!("toggle-{}", i));
+                    let fk = block.data.fk.unwrap_or_else(|| format!("toggle-{i}"));
                     let status = block.data.status.unwrap_or_else(|| "open".into());
                     let display = if status == "closed" { "none" } else { "block" };
 
@@ -130,18 +130,12 @@ fn to_html(document: Document) -> String {
                     }
 
                     html_string.push_str(&format!(
-                    "<div class=\"js-toggle\" data-fk=\"{fk}\" data-status=\"{status}\" data-items=\"{items}\">
+                    "<div class=\"js-toggle\" data-fk=\"{fk}\" data-status=\"{status}\" data-items=\"{count}\">
                         <div class=\"js-toggle-label\" onclick=\"toggleContent('{fk}')\">{label}</div>
                         <div id=\"{fk}\" class=\"js-toggle-content\" style=\"display: {display};\">
                             {nested_html}
                         </div>
-                    </div>",
-                    fk = fk,
-                    status = status,
-                    items = count,
-                    label = label,
-                    display = display,
-                    nested_html = nested_html
+                    </div>"
                 ));
 
                     i += 1 + count as usize;
@@ -188,4 +182,211 @@ fn to_html(document: Document) -> String {
         );
     }
     html_string
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_header_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "header",
+                    "data": {
+                        "text": "This is a header",
+                        "level": 2
+                    }
+                }
+            ]
+        });
+        let expected_html = "<div class=\"js-head\"><h2>This is a header</h2></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_table_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "table",
+                    "data": {
+                        "withHeadings": true,
+                        "content": [
+                            ["Name", "Age"],
+                            ["John", "30"]
+                        ]
+                    }
+                }
+            ]
+        });
+        let expected_html = "<div class=\"js-table\"><table><tr><th>Name</th><th>Age</th></tr><tr><td>John</td><td>30</td></tr></table></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_quote_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "quote",
+                    "data": {
+                        "text": "This is a quote.",
+                        "caption": "Author"
+                    }
+                }
+            ]
+        });
+        let expected_html = "<div class=\"js-quote\"><blockquote style=\"text-align: \">This is a quote.</blockquote> - Author</div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_checklist_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "checklist",
+                    "data": {
+                        "items": [
+                            {"text": "Task 1", "checked": true},
+                            {"text": "Task 2", "checked": false}
+                        ]
+                    }
+                }
+            ]
+        });
+        let expected_html = "<div class=\"js-checklist\"><div class=\"js-checkbox\"><input type=\"checkbox\" checked disabled> Task 1</div><div class=\"js-checkbox\"><input type=\"checkbox\"  disabled> Task 2</div></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_code_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "code",
+                    "data": {
+                        "code": "let x = 1;"
+                    }
+                }
+            ]
+        });
+        let expected_html = "<div class=\"js-code\"><pre><xmp>let x = 1;</xmp></pre></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_link_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "link",
+                    "data": {
+                        "url": "http://example.com",
+                        "text": "Example"
+                    }
+                }
+            ]
+        });
+        let expected_html = "<div class=\"js-link\"><a href=\"http://example.com\" target=\"_blank\">Example</a></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_inlinetext_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "inlinetext",
+                    "data": {
+                        "text": "This is bold and italic",
+                        "bold": true,
+                        "italic": true
+                    }
+                }
+            ]
+        });
+        let expected_html = "<div class=\"js-inline\"><i><b>This is bold and italic</b></i></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_warning_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "warning",
+                    "data": {
+                        "title": "Warning!",
+                        "message": "This is a warning."
+                    }
+                }
+            ]
+        });
+        let expected_html =
+            "<div class=\"warning\"><strong>Warning!</strong><p>This is a warning.</p></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_image_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "image",
+                    "data": {
+                        "url": "http://example.com/image.jpg",
+                        "caption": "An example image"
+                    }
+                }
+            ]
+        });
+        let expected_html = "<div class=\"js-image\"><img src=\"http://example.com/image.jpg\">\n<div class=\"js-caption\">An example image</div></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_list_block() {
+        let json_data = json!({
+            "blocks": [
+                {
+                    "type": "list",
+                    "data": {
+                        "style": "ordered",
+                        "items": [
+                            {"content": "First item", "items": []},
+                            {"content": "Second item", "items": []}
+                        ]
+                    }
+                }
+            ]
+        });
+        let expected_html =
+            "<div class=\"js-list\"><ol><li>First item</li><li>Second item</li></ol></div>";
+        assert_eq!(value_to_html(&json_data).unwrap(), expected_html);
+    }
+
+    #[test]
+    fn test_paragraph_block() {
+        let json_data = json!({
+            "time": 1751061404527i64,
+            "blocks": [
+                {
+                    "id": "wlMDvGrN0v",
+                    "type": "paragraph",
+                    "data": {
+                        "text": "Text with a <a href=\"http://example.com./\">link</a>."
+                    }
+                }
+            ],
+            "version": "2.31.0-rc.7"
+        });
+
+        let expected_html = "<div class=\"js-para\"><p>Text with a <a href=\"http://example.com./\">link</a>.</p></div>";
+        let html_content = value_to_html(&json_data).unwrap();
+        assert_eq!(html_content, expected_html);
+    }
 }

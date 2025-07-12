@@ -22,7 +22,7 @@ fn form_list(items: &[ListItem], tag: &str, style: &str) -> String {
     let mut list = String::new();
     for item in items {
         let check = if style == "checklist" {
-            if item.meta.checked {
+            if item.meta.as_ref().is_some_and(|m| m.checked) {
                 " <input type='checkbox' checked disabled> "
             } else {
                 " <input type='checkbox' disabled> "
@@ -54,7 +54,7 @@ fn form_table(data: &[String], tag: &str) -> String {
         .iter()
         .map(|ele| format!("<{}>{}</{}>", tag, escape_html(ele), tag))
         .collect::<String>();
-    format!("<tr>{}</tr>", cells)
+    format!("<tr>{cells}</tr>")
 }
 
 pub fn render_block(block: Block) -> String {
@@ -68,7 +68,7 @@ pub fn render_block(block: Block) -> String {
                 l = data.level.unwrap_or(DEFAULT_HEADING_LEVEL),
                 t = escape_html(&data.text.unwrap_or_default()),
                 s = if let Some(align) = data.align.clone() {
-                    format!(" style=\"text-align: {};\"", align)
+                    format!(" style=\"text-align: {align};\"")
                 } else {
                     String::new()
                 }
@@ -78,11 +78,11 @@ pub fn render_block(block: Block) -> String {
             html_string.push_str(&format!(
                 "<div class=\"js-para\"{}><p>{}</p></div>",
                 if let Some(align) = data.align.clone() {
-                    format!(" style=\"text-align: {};\"", align)
+                    format!(" style=\"text-align: {align};\"")
                 } else {
                     String::new()
                 },
-                escape_html(&data.text.unwrap_or_default()),
+                data.text.unwrap_or_default(),
             ));
         }
         "list" => {
@@ -141,14 +141,14 @@ pub fn render_block(block: Block) -> String {
                         escape_html(&item.text)
                     ));
                 }
-                html_string.push_str(&format!("<div class=\"js-checklist\">{}</div>", checklist));
+                html_string.push_str(&format!("<div class=\"js-checklist\">{checklist}</div>"));
             }
         }
         "code" => {
             html_string.push_str(&format!(
                 "<div class=\"js-code{}\"><pre><xmp>{}</xmp></pre></div>",
                 if let Some(lang) = data.language_code {
-                    format!(" language-{}", lang)
+                    format!(" language-{lang}")
                 } else {
                     "".to_string()
                 },
@@ -165,21 +165,21 @@ pub fn render_block(block: Block) -> String {
         "inlinetext" => {
             let mut text = escape_html(&data.text.unwrap_or_default());
             if data.bold.unwrap_or_default() {
-                text = format!("<b>{}</b>", text);
+                text = format!("<b>{text}</b>");
             }
             if data.italic.unwrap_or_default() {
-                text = format!("<i>{}</i>", text);
+                text = format!("<i>{text}</i>");
             }
             if data.underline.unwrap_or_default() {
-                text = format!("<u>{}</u>", text);
+                text = format!("<u>{text}</u>");
             }
             if data.marker.unwrap_or_default() {
-                text = format!("<mark>{}</mark>", text);
+                text = format!("<mark>{text}</mark>");
             }
             if data.inline_code.unwrap_or_default() {
-                text = format!("<code>{}</code>", text);
+                text = format!("<code>{text}</code>");
             }
-            html_string.push_str(&format!("<div class=\"js-inline\">{}</div>", text));
+            html_string.push_str(&format!("<div class=\"js-inline\">{text}</div>"));
         }
         "warning" => {
             html_string.push_str(&format!(
@@ -196,9 +196,7 @@ pub fn render_block(block: Block) -> String {
             };
             if !url.is_empty() && is_valid_url(&url) {
                 html_string.push_str(&format!(
-                    r#"<div class="js-image{}{}{}">
-                        <img src="{}"{}>{}
-                    </div>"#,
+                    r#"<div class="js-image{}{}{}"><img src="{}"{}>{}</div>"#,
                     if data.stretched.unwrap_or_default() {
                         " js-image--stretched"
                     } else {
@@ -215,13 +213,9 @@ pub fn render_block(block: Block) -> String {
                         ""
                     },
                     url,
+                    String::new(),
                     if let Some(caption) = data.caption.clone() {
-                        format!(" alt=\"{}\"", escape_html(&caption))
-                    } else {
-                        String::new()
-                    },
-                    if let Some(caption) = data.caption.clone() {
-                        format!(" <p>{}</p>", caption)
+                        format!("\n<div class=\"js-caption\">{caption}</div>")
                     } else {
                         String::new()
                     }
@@ -242,17 +236,17 @@ pub fn render_block(block: Block) -> String {
                     </div>",
                     url,
                     if let Some(width) = data.width {
-                        format!(" width=\"{}\"", width)
+                        format!(" width=\"{width}\"")
                     } else {
                         String::new()
                     },
                     if let Some(height) = data.height {
-                        format!(" height=\"{}\"", height)
+                        format!(" height=\"{height}\"")
                     } else {
                         String::new()
                     },
                     if let Some(caption) = data.caption {
-                        format!("<p>{}</p>", caption)
+                        format!("<p>{caption}</p>")
                     } else {
                         String::new()
                     }
@@ -290,7 +284,7 @@ pub fn render_block(block: Block) -> String {
                 .unwrap_or("h4".to_string())
                 .to_ascii_lowercase();
             let style = if !style.is_empty() {
-                &format!(" style=\"{}\"", style)
+                &format!(" style=\"{style}\"")
             } else {
                 ""
             };
@@ -337,10 +331,7 @@ pub fn render_block(block: Block) -> String {
                         };
 
                         &format!(
-                            "<div class=\"js-delimiter\">
-                                <hr style=\"width: {}%; border: none; border-top: {}px solid #000; margin: 1em auto;\" />
-                            </div>",
-                            safe_width, safe_thickness
+                            "<div class=\"js-delimiter\">\n<hr style=\"width: {safe_width}%; border-top: {safe_thickness}px solid #000;\"/>\n                            </div>"
                         )
                     }
                     _ => "<div class=\"js-delimiter\"></br></div>",
@@ -359,7 +350,7 @@ pub fn render_block(block: Block) -> String {
                 data.text.unwrap_or_default()
             ));
         }
-        "codeBox" => {
+        "codebox" => {
             html_string.push_str(&format!(
                 "<div class=\"js-codeBox\">\n\
                 <pre class=\"language-{}\"><code>{}</code></pre>\n\

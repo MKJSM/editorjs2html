@@ -1,6 +1,6 @@
 [package]
 name = "editorjs2html"
-version = "0.1.11"
+version = "0.1.12"
 edition = "2021"
 authors = ["JS <mkjsm57@gmail.com>"]
 license = "MIT OR Apache-2.0"

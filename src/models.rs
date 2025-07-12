@@ -61,7 +61,7 @@ pub struct Data {
 pub struct ListItem {
     pub content: String,
     pub items: Vec<ListItem>,
-    pub meta: Meta,
+    pub meta: Option<Meta>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

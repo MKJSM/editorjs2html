@@ -44,10 +44,10 @@ enum AppError {
 impl fmt::Display for AppError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            AppError::Io(e) => write!(f, "I/O error: {}", e),
-            AppError::Json(e) => write!(f, "JSON error: {}", e),
-            AppError::Editor(e) => write!(f, "Editor error: {}", e),
-            AppError::Template(e) => write!(f, "Template error: {}", e),
+            AppError::Io(e) => write!(f, "I/O error: {e}"),
+            AppError::Json(e) => write!(f, "JSON error: {e}"),
+            AppError::Editor(e) => write!(f, "Editor error: {e}"),
+            AppError::Template(e) => write!(f, "Template error: {e}"),
         }
     }
 }
